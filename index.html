@@ -1,0 +1,1638 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AetherGear — Next-Gen Tech & Studio Essentials</title>
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            aether: {
+              bg: '#080B12',
+              card: '#0F1522',
+              elevated: '#161F32',
+              border: '#202D47',
+              accent: '#6366F1',
+              cyan: '#06B6D4',
+              emerald: '#10B981',
+              amber: '#F59E0B',
+              rose: '#F43F5E'
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    body {
+      background-color: #080B12;
+      color: #F8FAFC;
+      font-family: 'Inter', sans-serif;
+      background-image:
+        radial-gradient(circle at 14% 10%, rgba(99, 102, 241, 0.14) 0%, transparent 42%),
+        radial-gradient(circle at 86% 15%, rgba(6, 182, 212, 0.10) 0%, transparent 45%);
+      min-height: 100vh;
+    }
+
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+
+    .glass-panel {
+      background: rgba(15, 21, 34, 0.85);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(32, 45, 71, 0.9);
+      box-shadow: 0 20px 45px -15px rgba(0, 0, 0, 0.65);
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0A0E17;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #202D47;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #334770;
+    }
+
+    /* Drawer & Modal Transitions */
+    .drawer-backdrop {
+      transition: opacity 0.3s ease;
+    }
+    .drawer-panel {
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    @keyframes badgePop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.35); }
+      100% { transform: scale(1); }
+    }
+    .badge-pop {
+      animation: badgePop 0.3s ease;
+    }
+
+    @media print {
+      body * { visibility: hidden; }
+      #receiptPrintable, #receiptPrintable * { visibility: visible; }
+      #receiptPrintable {
+        position: fixed;
+        inset: 0;
+        background: #ffffff !important;
+        color: #0f172a !important;
+        padding: 2rem;
+      }
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-indigo-500/30 selection:text-indigo-200 pb-16">
+
+  <!-- Sticky Top Navigation Bar -->
+  <header class="sticky top-0 z-40 border-b border-aether-border/80 bg-[#080B12]/90 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
+      <!-- Brand -->
+      <a href="#catalog" class="flex items-center gap-3 shrink-0 group">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 via-purple-500 to-cyan-400 flex items-center justify-center shadow-lg shadow-indigo-500/25 group-hover:scale-105 transition">
+          <i data-lucide="cpu" class="w-5 h-5 text-white stroke-[2.3]"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-bold text-lg tracking-tight text-white">Aether<span class="text-indigo-400">Gear</span></span>
+            <span class="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">STUDIO</span>
+          </div>
+          <p class="text-[11px] text-slate-400 hidden lg:block">Next-Gen Tech & Minimalist Workspace Essentials</p>
+        </div>
+      </a>
+
+      <!-- Search Input -->
+      <div class="relative flex-1 max-w-md mx-2">
+        <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+        <input
+          id="searchInput"
+          type="text"
+          autocomplete="off"
+          placeholder="Search gear, audio, keyboards... (Press /)"
+          class="w-full bg-aether-card/95 border border-aether-border focus:border-indigo-500 rounded-xl pl-10 pr-8 py-2 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none transition"
+        />
+        <button id="clearSearchBtn" type="button" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-3.5 h-3.5"></i>
+        </button>
+      </div>
+
+      <!-- Right Controls: Currency, Wishlist Filter, Cart Button -->
+      <div class="flex items-center gap-2 sm:gap-2.5 shrink-0">
+        <!-- Currency Switcher -->
+        <select
+          id="currencySelect"
+          aria-label="Select Currency"
+          class="bg-aether-card border border-aether-border hover:border-slate-600 rounded-xl px-2.5 py-2 text-xs font-mono font-semibold text-slate-200 focus:outline-none focus:border-indigo-500 cursor-pointer"
+        >
+          <option value="USD">USD ($)</option>
+          <option value="EUR">EUR (€)</option>
+          <option value="GBP">GBP (£)</option>
+          <option value="PKR">PKR (Rs)</option>
+        </select>
+
+        <!-- Wishlist Filter Button -->
+        <button
+          id="wishlistToggleBtn"
+          type="button"
+          title="Toggle Saved Wishlist Items"
+          class="relative p-2.5 rounded-xl bg-aether-card hover:bg-aether-elevated border border-aether-border text-slate-300 hover:text-rose-400 transition"
+        >
+          <i id="navHeartIcon" data-lucide="heart" class="w-4 h-4"></i>
+          <span id="wishlistBadge" class="hidden absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 rounded-full bg-rose-500 text-white font-mono text-[10px] font-bold flex items-center justify-center">0</span>
+        </button>
+
+        <!-- Cart Drawer Trigger -->
+        <button
+          id="openCartBtn"
+          type="button"
+          class="relative flex items-center gap-2 px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs sm:text-sm font-semibold shadow-lg shadow-indigo-600/25 transition"
+        >
+          <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+          <span class="hidden sm:inline">Cart</span>
+          <span id="cartCountBadge" class="min-w-[20px] h-5 px-1.5 rounded-full bg-white text-slate-950 font-mono text-xs font-bold flex items-center justify-center tabular-nums">
+            0
+          </span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 space-y-8">
+
+    <!-- Compact Flagship Promo Hero Banner -->
+    <section class="glass-panel rounded-3xl p-6 sm:p-8 relative overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-r from-indigo-600/15 via-purple-600/10 to-cyan-500/10 pointer-events-none"></div>
+      <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+        <div class="space-y-3 max-w-2xl">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-medium">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+            <span>Studio Drop 2026 • Use code <strong class="font-mono text-white">PRO20</strong> for 20% OFF</span>
+          </div>
+          <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-white leading-tight">
+            Precision Hardware for <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-cyan-300 to-emerald-300">Modern Creators</span>
+          </h1>
+          <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+            Engineered acoustic gear, custom mechanical keyboards, and modular desk ecosystems. Enjoy complimentary Express Shipping on all orders above <span id="heroThresholdText" class="font-mono font-semibold text-cyan-300">$250.00</span>.
+          </p>
+        </div>
+
+        <!-- Flash Sale Countdown & Quick Action -->
+        <div class="flex flex-wrap sm:flex-nowrap items-center gap-4 bg-[#080B12]/80 border border-aether-border rounded-2xl p-4 shrink-0">
+          <div>
+            <div class="text-[11px] font-mono uppercase tracking-wider text-slate-400 mb-1">Flash Event Ends In</div>
+            <div class="flex items-center gap-2 font-mono text-lg sm:text-xl font-bold text-white tabular-nums">
+              <span id="timerHrs" class="bg-aether-elevated px-2.5 py-1 rounded-lg border border-aether-border">04</span>:
+              <span id="timerMins" class="bg-aether-elevated px-2.5 py-1 rounded-lg border border-aether-border">42</span>:
+              <span id="timerSecs" class="bg-aether-elevated px-2.5 py-1 rounded-lg border border-aether-border text-cyan-400">19</span>
+            </div>
+          </div>
+          <a href="#catalog" class="px-4 py-3 rounded-xl bg-white hover:bg-slate-100 text-slate-950 text-xs font-bold flex items-center gap-1.5 transition shrink-0">
+            <span>Explore Gear</span>
+            <i data-lucide="arrow-down-right" class="w-4 h-4"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Catalog Filter, Sort & Stats Bar -->
+    <section id="catalog" class="space-y-5 scroll-mt-20">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <!-- Category Pills -->
+        <div id="categoryPills" class="flex items-center gap-2 flex-wrap">
+          <button data-cat="All" class="cat-pill px-3.5 py-2 rounded-xl text-xs font-semibold bg-indigo-600 text-white shadow-md shadow-indigo-600/20 transition">All Gear</button>
+          <button data-cat="Audio" class="cat-pill px-3.5 py-2 rounded-xl text-xs font-medium bg-aether-card hover:bg-aether-elevated text-slate-300 border border-aether-border transition">Audio</button>
+          <button data-cat="Workstations" class="cat-pill px-3.5 py-2 rounded-xl text-xs font-medium bg-aether-card hover:bg-aether-elevated text-slate-300 border border-aether-border transition">Workstations</button>
+          <button data-cat="Wearables" class="cat-pill px-3.5 py-2 rounded-xl text-xs font-medium bg-aether-card hover:bg-aether-elevated text-slate-300 border border-aether-border transition">Wearables</button>
+          <button data-cat="Accessories" class="cat-pill px-3.5 py-2 rounded-xl text-xs font-medium bg-aether-card hover:bg-aether-elevated text-slate-300 border border-aether-border transition">Accessories</button>
+        </div>
+
+        <!-- Sort & Count -->
+        <div class="flex items-center justify-between md:justify-end gap-3">
+          <span id="productCountLabel" class="text-xs font-mono text-slate-400">Showing 12 products</span>
+          <select
+            id="sortSelect"
+            aria-label="Sort Products"
+            class="bg-aether-card border border-aether-border rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500 cursor-pointer"
+          >
+            <option value="featured">Sort: Featured</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+            <option value="rating">Highest Rated</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Product Grid -->
+      <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+        <!-- Cards injected via JS -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===================================================================== -->
+  <!-- SLIDE-OVER PRO SHOPPING CART DRAWER                                   -->
+  <!-- ===================================================================== -->
+  <div id="cartDrawerOverlay" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm drawer-backdrop opacity-0">
+    <aside
+      id="cartDrawerPanel"
+      class="fixed top-0 right-0 bottom-0 w-full max-w-lg bg-[#0B101B] border-l border-aether-border shadow-2xl flex flex-col translate-x-full drawer-panel"
+    >
+      <!-- Drawer Header -->
+      <div class="px-5 py-4 border-b border-aether-border flex items-center justify-between bg-[#0E1422]">
+        <div class="flex items-center gap-2.5">
+          <i data-lucide="shopping-bag" class="w-5 h-5 text-indigo-400"></i>
+          <h2 class="text-base font-bold text-white">Your Shopping Cart</h2>
+          <span id="drawerItemCount" class="px-2 py-0.5 rounded-full text-xs font-mono bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">0 items</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="clearCartBtn" type="button" class="text-xs text-slate-400 hover:text-rose-400 px-2 py-1 rounded-lg transition">Clear All</button>
+          <button id="closeCartBtn" type="button" class="p-1.5 rounded-xl bg-aether-elevated hover:bg-slate-700 text-slate-300 hover:text-white transition">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Dynamic Free Shipping Progress Bar -->
+      <div class="px-5 py-3 bg-[#090D16] border-b border-aether-border/80">
+        <div class="flex items-center justify-between text-xs mb-1.5">
+          <span id="shippingProgressText" class="text-slate-300 font-medium">Add <strong class="text-cyan-300 font-mono">$250.00</strong> more for FREE Express Shipping!</span>
+          <span id="shippingPercentText" class="font-mono text-[11px] text-slate-400">0%</span>
+        </div>
+        <div class="w-full h-2 bg-aether-elevated rounded-full overflow-hidden">
+          <div id="shippingProgressBar" class="h-full bg-gradient-to-r from-indigo-500 to-cyan-400 rounded-full transition-all duration-500" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <!-- Scrollable Cart Body (Active Items + Saved for Later) -->
+      <div class="flex-1 overflow-y-auto px-5 py-4 space-y-6">
+        <!-- Active Cart Items Container -->
+        <div id="cartItemsContainer" class="space-y-3">
+          <!-- Populated dynamically -->
+        </div>
+
+        <!-- Saved For Later Section -->
+        <div id="savedForLaterSection" class="hidden pt-4 border-t border-aether-border/80 space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+              <i data-lucide="bookmark" class="w-3.5 h-3.5 text-amber-400"></i>
+              <span>Saved For Later (<span id="savedCountLabel">0</span>)</span>
+            </h3>
+          </div>
+          <div id="savedItemsContainer" class="space-y-2.5">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Drawer Footer: Promo Codes, Shipping Method, Totals & Checkout -->
+      <div id="cartFooter" class="border-t border-aether-border bg-[#0E1422] p-5 space-y-4">
+        <!-- Promo Code Box -->
+        <div>
+          <div class="flex gap-2">
+            <div class="relative flex-1">
+              <i data-lucide="tag" class="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+              <input
+                id="promoInput"
+                type="text"
+                placeholder="Promo code (e.g. PRO20)"
+                class="w-full bg-[#080B12] border border-aether-border focus:border-indigo-500 rounded-xl pl-8 pr-3 py-2 text-xs font-mono uppercase text-white placeholder-slate-500 focus:outline-none"
+              />
+            </div>
+            <button id="applyPromoBtn" type="button" class="px-4 py-2 rounded-xl bg-aether-elevated hover:bg-indigo-600 text-xs font-semibold text-white border border-aether-border transition">
+              Apply
+            </button>
+          </div>
+          <!-- Clickable Suggested Promo Pills -->
+          <div class="flex items-center gap-1.5 mt-2 flex-wrap">
+            <span class="text-[11px] text-slate-500">Try:</span>
+            <button type="button" data-code="PRO20" class="promo-pill px-2 py-0.5 rounded bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 border border-indigo-500/25 font-mono text-[10px] transition">PRO20 (20% Off)</button>
+            <button type="button" data-code="WELCOME15" class="promo-pill px-2 py-0.5 rounded bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/25 font-mono text-[10px] transition">WELCOME15</button>
+            <button type="button" data-code="FREESHIP" class="promo-pill px-2 py-0.5 rounded bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/25 font-mono text-[10px] transition">FREESHIP</button>
+          </div>
+          <div id="promoStatusMsg" class="hidden text-[11px] font-medium mt-1.5"></div>
+        </div>
+
+        <!-- Shipping Tier Selector -->
+        <div class="grid grid-cols-2 gap-2 text-xs">
+          <button id="shipStandardBtn" type="button" class="p-2.5 rounded-xl border border-indigo-500 bg-indigo-500/10 text-left transition">
+            <div class="font-semibold text-white">Standard Delivery</div>
+            <div id="standardRateLabel" class="font-mono text-[11px] text-slate-400">3-5 Days • $9.99</div>
+          </button>
+          <button id="shipExpressBtn" type="button" class="p-2.5 rounded-xl border border-aether-border bg-[#080B12] text-left hover:border-slate-600 transition">
+            <div class="font-semibold text-white">Express Priority</div>
+            <div id="expressRateLabel" class="font-mono text-[11px] text-slate-400">Next Day • $24.99</div>
+          </button>
+        </div>
+
+        <!-- Itemized Order Summary -->
+        <div class="space-y-1.5 text-xs pt-2 border-t border-aether-border/70">
+          <div class="flex justify-between text-slate-400">
+            <span>Subtotal</span>
+            <span id="summarySubtotal" class="font-mono text-slate-200 tabular-nums">$0.00</span>
+          </div>
+          <div id="discountRow" class="hidden flex justify-between text-emerald-400">
+            <span>Discount (<span id="activePromoLabel">PRO20</span>)</span>
+            <span id="summaryDiscount" class="font-mono tabular-nums">-$0.00</span>
+          </div>
+          <div class="flex justify-between text-slate-400">
+            <span>Shipping</span>
+            <span id="summaryShipping" class="font-mono text-slate-200 tabular-nums">$0.00</span>
+          </div>
+          <div class="flex justify-between text-slate-400">
+            <span>Estimated Tax (8%)</span>
+            <span id="summaryTax" class="font-mono text-slate-200 tabular-nums">$0.00</span>
+          </div>
+          <div class="flex justify-between items-baseline pt-2 border-t border-aether-border text-sm font-bold text-white">
+            <span>Grand Total</span>
+            <span id="summaryTotal" class="font-mono text-lg text-emerald-400 tabular-nums">$0.00</span>
+          </div>
+        </div>
+
+        <!-- Checkout CTA -->
+        <button
+          id="proceedCheckoutBtn"
+          type="button"
+          class="w-full py-3.5 rounded-xl bg-gradient-to-r from-indigo-600 to-cyan-600 hover:from-indigo-500 hover:to-cyan-500 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/25 transition disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          <i data-lucide="lock" class="w-4 h-4"></i>
+          <span>Proceed to Checkout</span>
+        </button>
+      </div>
+    </aside>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- PRODUCT QUICK VIEW MODAL                                              -->
+  <!-- ===================================================================== -->
+  <div id="quickViewModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-[#0F1522] border border-aether-border rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl relative">
+      <button id="closeQuickViewBtn" type="button" class="absolute top-4 right-4 z-10 p-2 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-white border border-aether-border transition">
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+      <div id="quickViewContent" class="grid grid-cols-1 md:grid-cols-2">
+        <!-- Populated dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- CHECKOUT & DIGITAL RECEIPT MODAL                                      -->
+  <!-- ===================================================================== -->
+  <div id="checkoutModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-[#0F1522] border border-aether-border rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl my-auto">
+      <div class="px-6 py-4 border-b border-aether-border flex items-center justify-between bg-[#131B2E]">
+        <h3 id="checkoutModalTitle" class="text-base font-bold text-white flex items-center gap-2">
+          <i data-lucide="shield-check" class="w-5 h-5 text-emerald-400"></i>
+          <span>Express Encrypted Checkout</span>
+        </h3>
+        <button id="closeCheckoutBtn" type="button" class="p-1.5 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Checkout Form View -->
+      <form id="checkoutForm" class="p-6 space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Full Name *</label>
+            <input id="chkName" type="text" required placeholder="Alex Mercer" class="w-full bg-[#080B12] border border-aether-border focus:border-indigo-500 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none" />
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Email for Receipt *</label>
+            <input id="chkEmail" type="email" required placeholder="alex@studio.io" class="w-full bg-[#080B12] border border-aether-border focus:border-indigo-500 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Shipping Address *</label>
+          <input id="chkAddress" type="text" required placeholder="742 Innovation Blvd, Suite 400, San Francisco" class="w-full bg-[#080B12] border border-aether-border focus:border-indigo-500 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none" />
+        </div>
+
+        <div class="pt-2 border-t border-aether-border/70">
+          <label class="block text-xs text-slate-400 mb-1.5">Simulated Card Payment</label>
+          <div class="grid grid-cols-3 gap-2.5">
+            <input type="text" value="4532 •••• •••• 8841" readonly class="col-span-2 bg-[#080B12] border border-aether-border rounded-xl px-3.5 py-2.5 text-xs font-mono text-slate-300" />
+            <input type="text" value="09/29 • 842" readonly class="bg-[#080B12] border border-aether-border rounded-xl px-3 py-2.5 text-xs font-mono text-slate-300 text-center" />
+          </div>
+        </div>
+
+        <div class="bg-[#080B12] border border-aether-border rounded-xl p-3.5 flex items-center justify-between text-xs">
+          <span class="text-slate-400">Total Payable Amount</span>
+          <span id="checkoutPayableAmount" class="font-mono text-base font-bold text-emerald-400">$0.00</span>
+        </div>
+
+        <button type="submit" class="w-full py-3.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm shadow-lg shadow-emerald-500/20 transition">
+          Confirm & Place Order
+        </button>
+      </form>
+
+      <!-- Digital Receipt View (Shown after order placement) -->
+      <div id="receiptView" class="hidden p-6 space-y-5">
+        <div id="receiptPrintable" class="bg-[#080B12] border border-aether-border rounded-2xl p-5 space-y-4">
+          <div class="flex items-center justify-between border-b border-aether-border pb-3">
+            <div>
+              <div class="text-xs font-mono text-emerald-400 uppercase font-semibold">Payment Confirmed</div>
+              <h4 id="receiptOrderId" class="text-lg font-mono font-bold text-white">#AG-2026-8492</h4>
+            </div>
+            <div class="w-10 h-10 rounded-full bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+              <i data-lucide="check" class="w-5 h-5"></i>
+            </div>
+          </div>
+
+          <div class="text-xs text-slate-400 space-y-1">
+            <div>Customer: <strong id="receiptCustomer" class="text-slate-200">--</strong></div>
+            <div>Delivery: <strong id="receiptAddress" class="text-slate-200">--</strong></div>
+            <div>Date: <strong id="receiptDate" class="text-slate-200 font-mono">--</strong></div>
+          </div>
+
+          <div id="receiptItemsList" class="divide-y divide-aether-border/60 border-y border-aether-border/60 py-2 text-xs space-y-1.5">
+            <!-- Ordered items -->
+          </div>
+
+          <div class="flex justify-between items-center text-sm font-bold text-white pt-1">
+            <span>Total Paid</span>
+            <span id="receiptTotalPaid" class="font-mono text-emerald-400 text-base">$0.00</span>
+          </div>
+        </div>
+
+        <div class="flex gap-3">
+          <button type="button" onclick="window.print()" class="flex-1 py-2.5 rounded-xl bg-aether-elevated hover:bg-slate-700 text-white text-xs font-semibold border border-aether-border flex items-center justify-center gap-1.5 transition">
+            <i data-lucide="printer" class="w-4 h-4"></i>
+            <span>Print Receipt</span>
+          </button>
+          <button id="doneReceiptBtn" type="button" class="flex-1 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold transition">
+            Continue Shopping
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification with Optional Undo Button -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 translate-y-24 opacity-0 pointer-events-none transition-all duration-300 bg-slate-900 border border-indigo-500/40 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 text-xs font-medium">
+    <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+    <span id="toastMsg">Added to cart</span>
+    <button id="toastUndoBtn" type="button" class="hidden px-2 py-0.5 rounded bg-indigo-500/20 hover:bg-indigo-500/40 text-indigo-300 font-mono font-semibold border border-indigo-500/30">
+      Undo
+    </button>
+  </div>
+
+  <script>
+    // =========================================================================
+    // 1. PRODUCT CATALOG DATA & CURRENCY RATES
+    // =========================================================================
+    const CURRENCIES = {
+      USD: { symbol: '$', rate: 1, decimals: 2 },
+      EUR: { symbol: '€', rate: 0.92, decimals: 2 },
+      GBP: { symbol: '£', rate: 0.79, decimals: 2 },
+      PKR: { symbol: 'Rs ', rate: 278.5, decimals: 0 }
+    };
+
+    const PROMO_CODES = {
+      PRO20: { type: 'percent', value: 20, label: 'PRO20 (20% Off)' },
+      WELCOME15: { type: 'percent', value: 15, label: 'WELCOME15 (15% Off)' },
+      FREESHIP: { type: 'shipping', value: 100, label: 'FREESHIP (Free Delivery)' }
+    };
+
+    const PRODUCTS = [
+      {
+        id: 'ag-01',
+        name: 'AetherPods Studio ANC',
+        category: 'Audio',
+        price: 249.00,
+        oldPrice: 299.00,
+        rating: 4.9,
+        reviews: 342,
+        badge: 'Bestseller',
+        badgeColor: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+        variants: ['Obsidian Matte', 'Titanium Silver', 'Midnight Blue'],
+        swatchHex: ['#1E293B', '#94A3B8', '#1E3A8A'],
+        specs: '45dB Adaptive Hybrid ANC • Lossless Spatial Audio • 40-Hour Battery • Dual-Device Multipoint',
+        description: 'Reference-grade wireless over-ear headphones tuned for studio mastering and deep focus sessions.',
+        icon: 'headphones',
+        gradient: 'from-indigo-500/25 via-purple-500/15 to-slate-900'
+      },
+      {
+        id: 'ag-02',
+        name: 'KeyChronos 75% Aluminum Mech',
+        category: 'Workstations',
+        price: 189.00,
+        oldPrice: 229.00,
+        rating: 4.8,
+        reviews: 218,
+        badge: 'In Stock',
+        badgeColor: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+        variants: ['Tactile Brown', 'Linear Red', 'Silent Panda'],
+        swatchHex: ['#92400E', '#DC2626', '#E2E8F0'],
+        specs: 'CNC 6063 Aluminum Body • Gasket Mount • Hot-Swappable PCB • QMK/VIA Programmable • Tri-Mode Wireless',
+        description: 'Precision-milled mechanical keyboard engineered with acoustic foam dampening and south-facing RGB.',
+        icon: 'keyboard',
+        gradient: 'from-cyan-500/25 via-sky-500/15 to-slate-900'
+      },
+      {
+        id: 'ag-03',
+        name: 'ChronoPulse Titanium Watch',
+        category: 'Wearables',
+        price: 329.00,
+        oldPrice: 379.00,
+        rating: 4.9,
+        reviews: 189,
+        badge: 'Low Stock',
+        badgeColor: 'bg-rose-500/15 text-rose-300 border-rose-500/30',
+        variants: ['Raw Titanium', 'Stealth Black'],
+        swatchHex: ['#CBD5E1', '#0F172A'],
+        specs: 'Grade-5 Titanium Case • Sapphire Crystal AMOLED • Dual-Band GPS • ECG & HRV Biosensors • 14-Day Battery',
+        description: 'Ultra-lightweight performance smartwatch built with aerospace titanium and medical-grade biometric sensors.',
+        icon: 'watch',
+        gradient: 'from-emerald-500/25 via-teal-500/15 to-slate-900'
+      },
+      {
+        id: 'ag-04',
+        name: 'ThunderDock 14-in-1 Pro Hub',
+        category: 'Workstations',
+        price: 159.00,
+        oldPrice: null,
+        rating: 4.7,
+        reviews: 154,
+        badge: 'In Stock',
+        badgeColor: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+        variants: ['Space Gray', 'Silver'],
+        swatchHex: ['#334155', '#CBD5E1'],
+        specs: 'Thunderbolt 4 (40Gbps) • Dual 4K@120Hz Display • 100W GaN PD Charging • 2.5GbE Ethernet • UHS-II SD',
+        description: 'Single-cable workstation docking station transforming any laptop into a multi-monitor studio command center.',
+        icon: 'hard-drive',
+        gradient: 'from-blue-500/25 via-indigo-500/15 to-slate-900'
+      },
+      {
+        id: 'ag-05',
+        name: 'SonicWave Studio Condenser Mic',
+        category: 'Audio',
+        price: 139.00,
+        oldPrice: 169.00,
+        rating: 4.8,
+        reviews: 276,
+        badge: 'Bestseller',
+        badgeColor: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+        variants: ['Carbon Black', 'Arctic White'],
+        swatchHex: ['#1E293B', '#F8FAFC'],
+        specs: '24-bit/192kHz Resolution • Cardioid Capsule • Hardware DSP Limiter • Zero-Latency Monitoring • USB-C & XLR',
+        description: 'Broadcast-quality podcast and streaming microphone with built-in pop shield and tactile gain dial.',
+        icon: 'mic',
+        gradient: 'from-purple-500/25 via-pink-500/15 to-slate-900'
+      },
+      {
+        id: 'ag-06',
+        name: 'LuminaBar Pro Monitor Light',
+        category: 'Workstations',
+        price: 89.00,
+        oldPrice: 109.00,
+        rating: 4.9,
+        reviews: 412,
+        badge: 'In Stock',
+        badgeColor: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+        variants: ['Matte Black'],
+        swatchHex: ['#1E293B'],
+        specs: 'Asymmetric Anti-Glare Optics • CRI >98 • 2700K–6500K Stepless Dial • Wireless Puck Controller',
+        description: 'Zero screen-reflection task lighting designed to eliminate eye strain during late-night coding and editing.',
+        icon: 'lamp-desk',
+        gradient: 'from-amber-500/25 via-orange-500/15 to-slate-900'
+      },
+      {
+        id: 'ag-07',
+        name: 'VoltCore 140W GaN MagStation',
+        category: 'Accessories',
+        price: 95.00,
+        oldPrice: 119.00,
+        rating: 4.7,
+        reviews: 198,
+        badge: 'In Stock',
+        badgeColor: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+        variants: ['Graphite', 'Frost'],
+        swatchHex: ['#334155', '#E2E8F0'],
+        specs: '140W GaN III Fast Charge • Qi2 15W Magnetic Stand • Live OLED Wattage Display • 4-Device Simultaneous Output',
+        description: 'Desktop power station with real-time OLED power telemetry and magnetic fast wireless charging.',
+        icon: 'zap',
+        gradient: 'from-cyan-500/25 via-emerald-500/15 to-slate-900'
+      },
+      {
+        id: 'ag-08',
+        name: 'GlideMaster Ergonomic Wireless Mouse',
+        category: 'Workstations',
+        price: 79.00,
+        oldPrice: 99.00,
+        rating: 4.6,
+        reviews: 167,
+        badge: 'In Stock',
+        badgeColor: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+        variants: ['Obsidian', 'Mist Gray'],
+        swatchHex: ['#0F172A', '#94A3B8'],
+        specs: '26,000 DPI Optical Sensor • MagSpeed Electromagnetic Wheel • Silent Switches • 70-Day USB-C Charge',
+        description: 'Sculpted ergonomic productivity mouse engineered for ultra-fast horizontal scrolling and pixel accuracy.',
+        icon: 'mouse',
+        gradient: 'from-indigo-500/25 via-sky-500/15 to-slate-900'
+      },
+      {
+        id: 'ag-09',
+        name: 'AuraRing Gen-3 Smart Health Ring',
+        category: 'Wearables',
+        price: 279.00,
+        oldPrice: null,
+        rating: 4.8,
+        reviews: 132,
+        badge: 'Low Stock',
+        badgeColor: 'bg-rose-500/15 text-rose-300 border-rose-500/30',
+        variants: ['Brushed Silver', 'Stealth Gold', 'Obsidian'],
+        swatchHex: ['#CBD5E1', '#D97706', '#1E293B'],
+        specs: '2.5mm Ultra-Thin Titanium • Sleep Stage & Readiness Tracking • 100m Water Resistance • 7-Day Battery',
+        description: 'Discreet screen-free health tracker monitoring sleep architecture, recovery, and daily readiness.',
+        icon: 'circle-dot',
+        gradient: 'from-fuchsia-500/25 via-purple-500/15 to-slate-900'
+      },
+      {
+        id: 'ag-10',
+        name: 'AeroPack Weatherproof Tech Sling',
+        category: 'Accessories',
+        price: 69.00,
+        oldPrice: 85.00,
+        rating: 4.9,
+        reviews: 289,
+        badge: 'Bestseller',
+        badgeColor: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+        variants: ['X-Pac Black', 'Olive Cordura'],
+        swatchHex: ['#0F172A', '#3F6212'],
+        specs: 'VX21 Waterproof Sailcloth • Fidlock Magnetic Buckle • Padded 11" Tablet Sleeve • Hidden AirTag Pocket',
+        description: 'Everyday carry sling engineered with weatherproof sailcloth and accordion cable organization.',
+        icon: 'briefcase',
+        gradient: 'from-teal-500/25 via-emerald-500/15 to-slate-900'
+      },
+      {
+        id: 'ag-11',
+        name: 'PulseBuds Pro Open-Ear HiFi',
+        category: 'Audio',
+        price: 149.00,
+        oldPrice: 179.00,
+        rating: 4.7,
+        reviews: 143,
+        badge: 'In Stock',
+        badgeColor: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+        variants: ['Midnight', 'Sandstone'],
+        swatchHex: ['#1E293B', '#D6D3D1'],
+        specs: '16.2mm Titanium Drivers • aptX Adaptive • IP68 Sweatproof • Directional Acoustic Beamforming',
+        description: 'Featherweight open-ear earbuds delivering rich bass while keeping you aware of your surroundings.',
+        icon: 'ear',
+        gradient: 'from-sky-500/25 via-indigo-500/15 to-slate-900'
+      },
+      {
+        id: 'ag-12',
+        name: 'NanoDrive 2TB MagSafe NVMe SSD',
+        category: 'Accessories',
+        price: 179.00,
+        oldPrice: 219.00,
+        rating: 4.9,
+        reviews: 204,
+        badge: 'In Stock',
+        badgeColor: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+        variants: ['2TB Graphite', '4TB Titanium'],
+        swatchHex: ['#334155', '#94A3B8'],
+        specs: '2,000 MB/s Read/Write • Magnetic Phone Attachment • Direct ProRes 4K60 Recording • Finned Heatsink',
+        description: 'Pocket-sized magnetic NVMe storage built for mobile filmmakers and high-speed studio workflows.',
+        icon: 'cpu',
+        gradient: 'from-violet-500/25 via-indigo-500/15 to-slate-900'
+      }
+    ];
+
+    // =========================================================================
+    // 2. APPLICATION STATE & LOCALSTORAGE PERSISTENCE
+    // =========================================================================
+    const FREE_SHIPPING_THRESHOLD_USD = 250;
+    const STANDARD_SHIPPING_USD = 9.99;
+    const EXPRESS_SHIPPING_USD = 24.99;
+    const TAX_RATE = 0.08;
+
+    const state = {
+      currency: localStorage.getItem('ag_currency') || 'USD',
+      category: 'All',
+      searchQuery: '',
+      sortBy: 'featured',
+      wishlistOnly: false,
+      wishlist: JSON.parse(localStorage.getItem('ag_wishlist')) || ['ag-01', 'ag-03'],
+      cart: JSON.parse(localStorage.getItem('ag_cart')) || [
+        { id: 'ag-02', variant: 'Linear Red', qty: 1 }
+      ],
+      savedForLater: JSON.parse(localStorage.getItem('ag_saved')) || [],
+      selectedVariants: {}, // productId -> variantName
+      promoCode: null,
+      shippingMethod: 'standard', // 'standard' | 'express'
+      lastRemovedItem: null
+    };
+
+    // =========================================================================
+    // 3. HELPERS & CURRENCY FORMATTER
+    // =========================================================================
+    const $ = (id) => document.getElementById(id);
+
+    function formatMoney(usdAmount) {
+      const cfg = CURRENCIES[state.currency] || CURRENCIES.USD;
+      const converted = usdAmount * cfg.rate;
+      const formatted = new Intl.NumberFormat('en-US', {
+        minimumFractionDigits: cfg.decimals,
+        maximumFractionDigits: cfg.decimals
+      }).format(converted);
+      return `${cfg.symbol}${formatted}`;
+    }
+
+    function saveState() {
+      localStorage.setItem('ag_currency', state.currency);
+      localStorage.setItem('ag_wishlist', JSON.stringify(state.wishlist));
+      localStorage.setItem('ag_cart', JSON.stringify(state.cart));
+      localStorage.setItem('ag_saved', JSON.stringify(state.savedForLater));
+    }
+
+    function showToast(message, canUndo = false) {
+      $('toastMsg').textContent = message;
+      const undoBtn = $('toastUndoBtn');
+      if (canUndo && state.lastRemovedItem) {
+        undoBtn.classList.remove('hidden');
+      } else {
+        undoBtn.classList.add('hidden');
+      }
+
+      const toast = $('toast');
+      toast.classList.remove('translate-y-24', 'opacity-0', 'pointer-events-none');
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => {
+        toast.classList.add('translate-y-24', 'opacity-0', 'pointer-events-none');
+      }, 3400);
+    }
+
+    // =========================================================================
+    // 4. CATALOG RENDERING & FILTERING
+    // =========================================================================
+    function getFilteredProducts() {
+      let list = [...PRODUCTS];
+
+      if (state.wishlistOnly) {
+        list = list.filter(p => state.wishlist.includes(p.id));
+      } else if (state.category !== 'All') {
+        list = list.filter(p => p.category === state.category);
+      }
+
+      if (state.searchQuery.trim()) {
+        const q = state.searchQuery.trim().toLowerCase();
+        list = list.filter(p =>
+          p.name.toLowerCase().includes(q) ||
+          p.category.toLowerCase().includes(q) ||
+          p.specs.toLowerCase().includes(q)
+        );
+      }
+
+      if (state.sortBy === 'price-asc') list.sort((a, b) => a.price - b.price);
+      else if (state.sortBy === 'price-desc') list.sort((a, b) => b.price - a.price);
+      else if (state.sortBy === 'rating') list.sort((a, b) => b.rating - a.rating);
+
+      return list;
+    }
+
+    function renderCatalog() {
+      const grid = $('productGrid');
+      const items = getFilteredProducts();
+      $('heroThresholdText').textContent = formatMoney(FREE_SHIPPING_THRESHOLD_USD);
+
+      $('productCountLabel').textContent = state.wishlistOnly
+        ? `Saved Wishlist (${items.length})`
+        : `Showing ${items.length} ${items.length === 1 ? 'product' : 'products'}`;
+
+      // Update Wishlist Nav Badge
+      const wishBadge = $('wishlistBadge');
+      if (state.wishlist.length > 0) {
+        wishBadge.textContent = state.wishlist.length;
+        wishBadge.classList.remove('hidden');
+      } else {
+        wishBadge.classList.add('hidden');
+      }
+
+      if (!items.length) {
+        grid.innerHTML = `
+          <div class="col-span-full glass-panel rounded-3xl p-12 text-center space-y-3">
+            <div class="w-12 h-12 rounded-2xl bg-aether-elevated mx-auto flex items-center justify-center text-slate-400">
+              <i data-lucide="search-x" class="w-6 h-6"></i>
+            </div>
+            <h3 class="text-base font-bold text-white">No matching gear found</h3>
+            <p class="text-xs text-slate-400 max-w-md mx-auto">Try clearing your search filter or switching back to all categories.</p>
+            <button type="button" onclick="resetCatalogFilters()" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold transition">
+              Reset Filters
+            </button>
+          </div>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      grid.innerHTML = '';
+      items.forEach(product => {
+        const isWishlisted = state.wishlist.includes(product.id);
+        const activeVariant = state.selectedVariants[product.id] || product.variants[0];
+
+        const card = document.createElement('article');
+        card.className = 'glass-panel rounded-2xl overflow-hidden flex flex-col justify-between group hover:border-indigo-500/50 transition duration-300';
+
+        const swatchesHtml = product.variants.map((v, idx) => {
+          const hex = product.swatchHex[idx] || '#64748B';
+          const selected = v === activeVariant;
+          return `
+            <button
+              type="button"
+              data-prod="${product.id}"
+              data-variant="${v}"
+              title="${v}"
+              class="swatch-btn w-4 h-4 rounded-full border transition ${selected ? 'ring-2 ring-indigo-400 ring-offset-2 ring-offset-[#0F1522] border-white scale-110' : 'border-slate-600 opacity-75 hover:opacity-100'}"
+              style="background-color: ${hex};"
+            ></button>
+          `;
+        }).join('');
+
+        card.innerHTML = `
+          <div>
+            <!-- Visual Artwork Header -->
+            <div class="relative h-44 bg-gradient-to-br ${product.gradient} p-5 flex items-center justify-center border-b border-aether-border/60 overflow-hidden">
+              <!-- Top Badges -->
+              <div class="absolute top-3 left-3 right-3 flex items-center justify-between z-10">
+                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold border ${product.badgeColor}">
+                  ${product.badge}
+                </span>
+                <button
+                  type="button"
+                  data-wish="${product.id}"
+                  title="${isWishlisted ? 'Remove from Wishlist' : 'Save to Wishlist'}"
+                  class="wish-btn p-2 rounded-xl bg-slate-950/65 hover:bg-slate-900 border border-white/10 transition ${isWishlisted ? 'text-rose-500' : 'text-slate-300 hover:text-rose-400'}"
+                >
+                  <i data-lucide="heart" class="w-4 h-4 ${isWishlisted ? 'fill-rose-500' : ''}"></i>
+                </button>
+              </div>
+
+              <!-- Stylized Product Vector Showcase -->
+              <div class="w-20 h-20 rounded-2xl bg-slate-950/60 border border-white/10 flex items-center justify-center shadow-2xl group-hover:scale-110 transition duration-300">
+                <i data-lucide="${product.icon}" class="w-10 h-10 text-indigo-300 stroke-[1.75]"></i>
+              </div>
+
+              <!-- Quick View Overlay Button -->
+              <button
+                type="button"
+                data-qv="${product.id}"
+                class="qv-btn opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 absolute bottom-3 px-3 py-1.5 rounded-xl bg-slate-950/85 hover:bg-indigo-600 text-white text-[11px] font-semibold border border-white/15 flex items-center gap-1.5 transition duration-200"
+              >
+                <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                <span>Quick Specs</span>
+              </button>
+            </div>
+
+            <!-- Card Body -->
+            <div class="p-4 space-y-2.5">
+              <div class="flex items-center justify-between text-[11px]">
+                <span class="font-mono text-indigo-400 uppercase tracking-wider">${product.category}</span>
+                <span class="flex items-center gap-1 text-amber-400 font-mono">
+                  <i data-lucide="star" class="w-3 h-3 fill-amber-400"></i>
+                  ${product.rating} <span class="text-slate-500">(${product.reviews})</span>
+                </span>
+              </div>
+
+              <h3 class="font-bold text-sm sm:text-base text-white group-hover:text-indigo-300 transition line-clamp-1">
+                ${product.name}
+              </h3>
+
+              <p class="text-xs text-slate-400 line-clamp-2 leading-relaxed">
+                ${product.description}
+              </p>
+
+              <!-- Variant Swatches -->
+              <div class="pt-1 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  ${swatchesHtml}
+                </div>
+                <span class="text-[11px] font-mono text-slate-400 truncate max-w-[115px]">${activeVariant}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card Footer: Price & Add to Cart -->
+          <div class="px-4 pb-4 pt-2 flex items-center justify-between gap-2 border-t border-aether-border/50 mt-2">
+            <div>
+              <div class="font-mono text-base sm:text-lg font-bold text-white tabular-nums">
+                ${formatMoney(product.price)}
+              </div>
+              ${product.oldPrice ? `<div class="font-mono text-[11px] text-slate-500 line-through tabular-nums">${formatMoney(product.oldPrice)}</div>` : ''}
+            </div>
+
+            <button
+              type="button"
+              data-add="${product.id}"
+              class="add-cart-btn px-3.5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-white text-xs font-semibold flex items-center gap-1.5 shadow-md shadow-indigo-600/20 transition"
+            >
+              <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+              <span>Add</span>
+            </button>
+          </div>
+        `;
+
+        grid.appendChild(card);
+      });
+
+      // Bind dynamic card events
+      grid.querySelectorAll('.swatch-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.selectedVariants[btn.dataset.prod] = btn.dataset.variant;
+          renderCatalog();
+        });
+      });
+
+      grid.querySelectorAll('.wish-btn').forEach(btn => {
+        btn.addEventListener('click', () => toggleWishlist(btn.dataset.wish));
+      });
+
+      grid.querySelectorAll('.qv-btn').forEach(btn => {
+        btn.addEventListener('click', () => openQuickView(btn.dataset.qv));
+      });
+
+      grid.querySelectorAll('.add-cart-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const prodId = btn.dataset.add;
+          const prod = PRODUCTS.find(p => p.id === prodId);
+          const variant = state.selectedVariants[prodId] || prod.variants[0];
+          addToCart(prodId, variant, 1);
+        });
+      });
+
+      lucide.createIcons();
+    }
+
+    function resetCatalogFilters() {
+      state.category = 'All';
+      state.searchQuery = '';
+      state.wishlistOnly = false;
+      $('searchInput').value = '';
+      $('clearSearchBtn').classList.add('hidden');
+      $('wishlistToggleBtn').classList.remove('border-rose-500/50', 'bg-rose-500/10');
+      updateCategoryPillUI();
+      renderCatalog();
+    }
+
+    function toggleWishlist(prodId) {
+      const prod = PRODUCTS.find(p => p.id === prodId);
+      const idx = state.wishlist.indexOf(prodId);
+      if (idx >= 0) {
+        state.wishlist.splice(idx, 1);
+        showToast(`Removed ${prod.name} from wishlist`);
+      } else {
+        state.wishlist.push(prodId);
+        showToast(`Saved ${prod.name} to wishlist`);
+      }
+      saveState();
+      renderCatalog();
+    }
+
+    // =========================================================================
+    // 5. QUICK VIEW MODAL
+    // =========================================================================
+    function openQuickView(prodId) {
+      const prod = PRODUCTS.find(p => p.id === prodId);
+      if (!prod) return;
+
+      let chosenVariant = state.selectedVariants[prodId] || prod.variants[0];
+      let chosenQty = 1;
+
+      const renderModalBody = () => {
+        const variantButtons = prod.variants.map(v => `
+          <button
+            type="button"
+            data-qv-var="${v}"
+            class="qv-var-btn px-3 py-1.5 rounded-xl text-xs font-medium border transition ${
+              v === chosenVariant
+                ? 'bg-indigo-600/20 border-indigo-500 text-white'
+                : 'bg-[#080B12] border-aether-border text-slate-400 hover:text-white'
+            }"
+          >${v}</button>
+        `).join('');
+
+        $('quickViewContent').innerHTML = `
+          <div class="bg-gradient-to-br ${prod.gradient} p-8 flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-aether-border">
+            <div class="w-28 h-28 rounded-3xl bg-slate-950/70 border border-white/10 flex items-center justify-center shadow-2xl mb-4">
+              <i data-lucide="${prod.icon}" class="w-14 h-14 text-indigo-300 stroke-[1.6]"></i>
+            </div>
+            <span class="px-3 py-1 rounded-full text-xs font-mono border ${prod.badgeColor}">${prod.badge}</span>
+          </div>
+
+          <div class="p-6 space-y-4">
+            <div>
+              <div class="text-xs font-mono text-indigo-400 uppercase">${prod.category}</div>
+              <h3 class="text-xl font-bold text-white mt-0.5">${prod.name}</h3>
+              <div class="flex items-center gap-2 mt-1 text-xs text-amber-400 font-mono">
+                <span>★ ${prod.rating}</span>
+                <span class="text-slate-500">(${prod.reviews} verified reviews)</span>
+              </div>
+            </div>
+
+            <div class="flex items-baseline gap-2.5">
+              <span class="font-mono text-2xl font-bold text-white">${formatMoney(prod.price)}</span>
+              ${prod.oldPrice ? `<span class="font-mono text-sm text-slate-500 line-through">${formatMoney(prod.oldPrice)}</span>` : ''}
+            </div>
+
+            <p class="text-xs text-slate-300 leading-relaxed">${prod.description}</p>
+
+            <div class="bg-[#080B12] border border-aether-border rounded-xl p-3 text-[11px] font-mono text-slate-300 leading-relaxed">
+              ${prod.specs}
+            </div>
+
+            <div>
+              <div class="text-xs text-slate-400 mb-1.5">Select Edition / Finish:</div>
+              <div class="flex flex-wrap gap-2">${variantButtons}</div>
+            </div>
+
+            <div class="pt-2 flex items-center gap-3">
+              <div class="flex items-center bg-[#080B12] border border-aether-border rounded-xl">
+                <button id="qvMinus" type="button" class="px-3 py-2 text-slate-300 hover:text-white font-mono">-</button>
+                <span id="qvQtyVal" class="px-3 py-2 font-mono text-xs font-bold text-white">${chosenQty}</span>
+                <button id="qvPlus" type="button" class="px-3 py-2 text-slate-300 hover:text-white font-mono">+</button>
+              </div>
+
+              <button id="qvAddBtn" type="button" class="flex-1 py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/25 transition">
+                <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+                <span>Add to Cart • ${formatMoney(prod.price * chosenQty)}</span>
+              </button>
+            </div>
+          </div>
+        `;
+
+        $('quickViewContent').querySelectorAll('.qv-var-btn').forEach(b => {
+          b.addEventListener('click', () => {
+            chosenVariant = b.dataset.qvVar;
+            state.selectedVariants[prodId] = chosenVariant;
+            renderModalBody();
+            renderCatalog();
+          });
+        });
+
+        $('qvMinus').addEventListener('click', () => {
+          if (chosenQty > 1) { chosenQty--; renderModalBody(); }
+        });
+        $('qvPlus').addEventListener('click', () => {
+          if (chosenQty < 20) { chosenQty++; renderModalBody(); }
+        });
+        $('qvAddBtn').addEventListener('click', () => {
+          addToCart(prodId, chosenVariant, chosenQty);
+          $('quickViewModal').classList.add('hidden');
+        });
+
+        lucide.createIcons();
+      };
+
+      renderModalBody();
+      $('quickViewModal').classList.remove('hidden');
+    }
+
+    // =========================================================================
+    // 6. SHOPPING CART ENGINE (ADD, UPDATE QTY, REMOVE, SAVE FOR LATER, TOTALS)
+    // =========================================================================
+    function addToCart(prodId, variant, qty = 1) {
+      const prod = PRODUCTS.find(p => p.id === prodId);
+      if (!prod) return;
+
+      const existing = state.cart.find(item => item.id === prodId && item.variant === variant);
+      if (existing) {
+        existing.qty += qty;
+      } else {
+        state.cart.push({ id: prodId, variant, qty });
+      }
+
+      saveState();
+      renderCart();
+
+      // Pop badge animation
+      const badge = $('cartCountBadge');
+      badge.classList.remove('badge-pop');
+      void badge.offsetWidth;
+      badge.classList.add('badge-pop');
+
+      showToast(`Added ${prod.name} (${variant}) to cart`);
+    }
+
+    function updateCartQty(index, delta) {
+      const item = state.cart[index];
+      if (!item) return;
+
+      const nextQty = item.qty + delta;
+      if (nextQty <= 0) {
+        removeCartItem(index);
+      } else {
+        item.qty = nextQty;
+        saveState();
+        renderCart();
+      }
+    }
+
+    function removeCartItem(index) {
+      const removed = state.cart[index];
+      if (!removed) return;
+      const prod = PRODUCTS.find(p => p.id === removed.id);
+
+      state.lastRemovedItem = { item: { ...removed }, index };
+      state.cart.splice(index, 1);
+      saveState();
+      renderCart();
+      showToast(`Removed ${prod ? prod.name : 'item'}`, true);
+    }
+
+    function undoLastRemove() {
+      if (!state.lastRemovedItem) return;
+      const { item, index } = state.lastRemovedItem;
+      state.cart.splice(Math.min(index, state.cart.length), 0, item);
+      state.lastRemovedItem = null;
+      saveState();
+      renderCart();
+      $('toast').classList.add('translate-y-24', 'opacity-0', 'pointer-events-none');
+    }
+
+    function saveItemForLater(index) {
+      const item = state.cart[index];
+      if (!item) return;
+      state.cart.splice(index, 1);
+
+      const existsSaved = state.savedForLater.find(s => s.id === item.id && s.variant === item.variant);
+      if (!existsSaved) {
+        state.savedForLater.push({ id: item.id, variant: item.variant });
+      }
+      saveState();
+      renderCart();
+      showToast('Moved item to Saved For Later');
+    }
+
+    function moveSavedToCart(savedIndex) {
+      const saved = state.savedForLater[savedIndex];
+      if (!saved) return;
+      state.savedForLater.splice(savedIndex, 1);
+      addToCart(saved.id, saved.variant, 1);
+    }
+
+    function calculateTotals() {
+      let subtotalUSD = 0;
+      let totalCount = 0;
+
+      state.cart.forEach(item => {
+        const prod = PRODUCTS.find(p => p.id === item.id);
+        if (prod) {
+          subtotalUSD += prod.price * item.qty;
+          totalCount += item.qty;
+        }
+      });
+
+      // Promo Discount
+      let discountUSD = 0;
+      const promo = state.promoCode ? PROMO_CODES[state.promoCode] : null;
+      if (promo && promo.type === 'percent') {
+        discountUSD = subtotalUSD * (promo.value / 100);
+      }
+
+      const discountedSubtotal = Math.max(0, subtotalUSD - discountUSD);
+
+      // Shipping Calculation
+      const qualifiesFreeExpress = subtotalUSD >= FREE_SHIPPING_THRESHOLD_USD || (promo && promo.type === 'shipping');
+      let shippingUSD = 0;
+      if (subtotalUSD > 0) {
+        if (qualifiesFreeExpress) {
+          shippingUSD = 0;
+        } else {
+          shippingUSD = state.shippingMethod === 'express' ? EXPRESS_SHIPPING_USD : STANDARD_SHIPPING_USD;
+        }
+      }
+
+      const taxUSD = discountedSubtotal * TAX_RATE;
+      const grandTotalUSD = discountedSubtotal + shippingUSD + taxUSD;
+
+      return {
+        subtotalUSD,
+        discountUSD,
+        shippingUSD,
+        taxUSD,
+        grandTotalUSD,
+        totalCount,
+        qualifiesFreeExpress
+      };
+    }
+
+    function renderCart() {
+      const totals = calculateTotals();
+
+      // Update Badges
+      $('cartCountBadge').textContent = totals.totalCount;
+      $('drawerItemCount').textContent = `${totals.totalCount} ${totals.totalCount === 1 ? 'item' : 'items'}`;
+
+      // Free Shipping Progress Bar
+      const pct = Math.min(100, Math.round((totals.subtotalUSD / FREE_SHIPPING_THRESHOLD_USD) * 100));
+      $('shippingPercentText').textContent = `${pct}%`;
+      $('shippingProgressBar').style.width = `${pct}%`;
+
+      if (totals.qualifiesFreeExpress && totals.subtotalUSD > 0) {
+        $('shippingProgressText').innerHTML = `<span class="text-emerald-400 font-semibold">🎉 You unlocked FREE Express Shipping!</span>`;
+        $('shippingProgressBar').className = 'h-full bg-emerald-400 rounded-full transition-all duration-500';
+      } else {
+        const remaining = Math.max(0, FREE_SHIPPING_THRESHOLD_USD - totals.subtotalUSD);
+        $('shippingProgressText').innerHTML = `Add <strong class="text-cyan-300 font-mono">${formatMoney(remaining)}</strong> more for FREE Express Shipping!`;
+        $('shippingProgressBar').className = 'h-full bg-gradient-to-r from-indigo-500 to-cyan-400 rounded-full transition-all duration-500';
+      }
+
+      // Shipping tier labels
+      $('standardRateLabel').textContent = totals.qualifiesFreeExpress ? '3-5 Days • FREE' : `3-5 Days • ${formatMoney(STANDARD_SHIPPING_USD)}`;
+      $('expressRateLabel').textContent = totals.qualifiesFreeExpress ? 'Next Day • FREE' : `Next Day • ${formatMoney(EXPRESS_SHIPPING_USD)}`;
+
+      // Render Active Cart Items
+      const container = $('cartItemsContainer');
+      if (!state.cart.length) {
+        container.innerHTML = `
+          <div class="py-12 text-center space-y-3">
+            <div class="w-14 h-14 rounded-2xl bg-aether-elevated mx-auto flex items-center justify-center text-slate-400">
+              <i data-lucide="shopping-cart" class="w-7 h-7"></i>
+            </div>
+            <h4 class="text-sm font-bold text-white">Your cart is empty</h4>
+            <p class="text-xs text-slate-400 max-w-xs mx-auto">Explore our studio workstations, audio hardware, and accessories to build your setup.</p>
+          </div>
+        `;
+        $('proceedCheckoutBtn').disabled = true;
+      } else {
+        $('proceedCheckoutBtn').disabled = false;
+        container.innerHTML = '';
+
+        state.cart.forEach((item, idx) => {
+          const prod = PRODUCTS.find(p => p.id === item.id);
+          if (!prod) return;
+
+          const row = document.createElement('div');
+          row.className = 'bg-[#0F1522] border border-aether-border rounded-2xl p-3.5 flex gap-3.5 items-start';
+          row.innerHTML = `
+            <div class="w-14 h-14 rounded-xl bg-gradient-to-br ${prod.gradient} border border-white/10 flex items-center justify-center shrink-0">
+              <i data-lucide="${prod.icon}" class="w-6 h-6 text-indigo-300"></i>
+            </div>
+
+            <div class="flex-1 min-w-0">
+              <div class="flex items-start justify-between gap-2">
+                <h4 class="text-xs sm:text-sm font-bold text-white truncate">${prod.name}</h4>
+                <span class="font-mono text-xs sm:text-sm font-bold text-white tabular-nums shrink-0">
+                  ${formatMoney(prod.price * item.qty)}
+                </span>
+              </div>
+              <div class="text-[11px] font-mono text-slate-400 mt-0.5">${item.variant} • ${formatMoney(prod.price)} each</div>
+
+              <div class="mt-3 flex items-center justify-between gap-2">
+                <!-- Quantity Stepper -->
+                <div class="inline-flex items-center bg-[#080B12] border border-aether-border rounded-lg">
+                  <button type="button" data-dec="${idx}" class="qty-dec px-2.5 py-1 text-slate-300 hover:text-white font-mono text-xs">-</button>
+                  <span class="px-2.5 py-1 font-mono text-xs font-bold text-white tabular-nums">${item.qty}</span>
+                  <button type="button" data-inc="${idx}" class="qty-inc px-2.5 py-1 text-slate-300 hover:text-white font-mono text-xs">+</button>
+                </div>
+
+                <!-- Save for Later & Remove -->
+                <div class="flex items-center gap-2 text-[11px]">
+                  <button type="button" data-save="${idx}" class="save-later-btn text-slate-400 hover:text-amber-300 transition">Save for later</button>
+                  <span class="text-slate-700">•</span>
+                  <button type="button" data-rem="${idx}" class="rem-item-btn text-slate-400 hover:text-rose-400 transition">Remove</button>
+                </div>
+              </div>
+            </div>
+          `;
+          container.appendChild(row);
+        });
+
+        container.querySelectorAll('.qty-dec').forEach(b => b.addEventListener('click', () => updateCartQty(parseInt(b.dataset.dec, 10), -1)));
+        container.querySelectorAll('.qty-inc').forEach(b => b.addEventListener('click', () => updateCartQty(parseInt(b.dataset.inc, 10), 1)));
+        container.querySelectorAll('.save-later-btn').forEach(b => b.addEventListener('click', () => saveItemForLater(parseInt(b.dataset.save, 10))));
+        container.querySelectorAll('.rem-item-btn').forEach(b => b.addEventListener('click', () => removeCartItem(parseInt(b.dataset.rem, 10))));
+      }
+
+      // Render Saved For Later Items
+      const savedSec = $('savedForLaterSection');
+      const savedList = $('savedItemsContainer');
+      if (state.savedForLater.length > 0) {
+        savedSec.classList.remove('hidden');
+        $('savedCountLabel').textContent = state.savedForLater.length;
+        savedList.innerHTML = '';
+
+        state.savedForLater.forEach((saved, sIdx) => {
+          const prod = PRODUCTS.find(p => p.id === saved.id);
+          if (!prod) return;
+          const sCard = document.createElement('div');
+          sCard.className = 'bg-[#080B12] border border-aether-border/80 rounded-xl p-3 flex items-center justify-between gap-3 text-xs';
+          sCard.innerHTML = `
+            <div class="min-w-0">
+              <div class="font-semibold text-slate-200 truncate">${prod.name}</div>
+              <div class="text-[11px] font-mono text-slate-500">${saved.variant} • ${formatMoney(prod.price)}</div>
+            </div>
+            <button type="button" data-move="${sIdx}" class="move-cart-btn shrink-0 px-2.5 py-1.5 rounded-lg bg-indigo-500/15 hover:bg-indigo-600 text-indigo-300 hover:text-white border border-indigo-500/30 font-semibold transition">
+              Move to Cart
+            </button>
+          `;
+          savedList.appendChild(sCard);
+        });
+
+        savedList.querySelectorAll('.move-cart-btn').forEach(b => {
+          b.addEventListener('click', () => moveSavedToCart(parseInt(b.dataset.move, 10)));
+        });
+      } else {
+        savedSec.classList.add('hidden');
+      }
+
+      // Update Summary Breakdown
+      $('summarySubtotal').textContent = formatMoney(totals.subtotalUSD);
+      if (totals.discountUSD > 0) {
+        $('discountRow').classList.remove('hidden');
+        $('activePromoLabel').textContent = state.promoCode;
+        $('summaryDiscount').textContent = `-${formatMoney(totals.discountUSD)}`;
+      } else {
+        $('discountRow').classList.add('hidden');
+      }
+
+      $('summaryShipping').textContent = totals.subtotalUSD === 0
+        ? formatMoney(0)
+        : (totals.shippingUSD === 0 ? 'FREE' : formatMoney(totals.shippingUSD));
+      $('summaryTax').textContent = formatMoney(totals.taxUSD);
+      $('summaryTotal').textContent = formatMoney(totals.grandTotalUSD);
+
+      lucide.createIcons();
+    }
+
+    // =========================================================================
+    // 7. DRAWER, PROMO CODES, CHECKOUT & COUNTDOWN TIMER
+    // =========================================================================
+    function openCartDrawer() {
+      const overlay = $('cartDrawerOverlay');
+      const panel = $('cartDrawerPanel');
+      overlay.classList.remove('hidden');
+      requestAnimationFrame(() => {
+        overlay.classList.remove('opacity-0');
+        panel.classList.remove('translate-x-full');
+      });
+    }
+
+    function closeCartDrawer() {
+      const overlay = $('cartDrawerOverlay');
+      const panel = $('cartDrawerPanel');
+      overlay.classList.add('opacity-0');
+      panel.classList.add('translate-x-full');
+      setTimeout(() => overlay.classList.add('hidden'), 320);
+    }
+
+    function applyPromoCode(rawCode) {
+      const code = rawCode.trim().toUpperCase();
+      const msg = $('promoStatusMsg');
+      msg.classList.remove('hidden');
+
+      if (!code) {
+        state.promoCode = null;
+        msg.className = 'text-[11px] font-medium mt-1.5 text-slate-400';
+        msg.textContent = 'Promo code cleared.';
+        renderCart();
+        return;
+      }
+
+      if (PROMO_CODES[code]) {
+        state.promoCode = code;
+        msg.className = 'text-[11px] font-medium mt-1.5 text-emerald-400';
+        msg.textContent = `✓ Applied ${PROMO_CODES[code].label}`;
+        showToast(`Promo code ${code} activated!`);
+      } else {
+        msg.className = 'text-[11px] font-medium mt-1.5 text-rose-400';
+        msg.textContent = 'Invalid promo code. Try PRO20, WELCOME15, or FREESHIP.';
+      }
+      renderCart();
+    }
+
+    function updateCategoryPillUI() {
+      document.querySelectorAll('.cat-pill').forEach(btn => {
+        if (!state.wishlistOnly && btn.dataset.cat === state.category) {
+          btn.className = 'cat-pill px-3.5 py-2 rounded-xl text-xs font-semibold bg-indigo-600 text-white shadow-md shadow-indigo-600/20 transition';
+        } else {
+          btn.className = 'cat-pill px-3.5 py-2 rounded-xl text-xs font-medium bg-aether-card hover:bg-aether-elevated text-slate-300 border border-aether-border transition';
+        }
+      });
+    }
+
+    function startFlashCountdown() {
+      let remainingSeconds = 4 * 3600 + 42 * 60 + 19;
+      setInterval(() => {
+        if (remainingSeconds <= 0) remainingSeconds = 5 * 3600;
+        remainingSeconds--;
+        const h = String(Math.floor(remainingSeconds / 3600)).padStart(2, '0');
+        const m = String(Math.floor((remainingSeconds % 3600) / 60)).padStart(2, '0');
+        const s = String(remainingSeconds % 60).padStart(2, '0');
+        $('timerHrs').textContent = h;
+        $('timerMins').textContent = m;
+        $('timerSecs').textContent = s;
+      }, 1000);
+    }
+
+    // =========================================================================
+    // 8. EVENT LISTENERS & INITIALIZATION
+    // =========================================================================
+    $('openCartBtn').addEventListener('click', openCartDrawer);
+    $('closeCartBtn').addEventListener('click', closeCartDrawer);
+    $('cartDrawerOverlay').addEventListener('click', (e) => {
+      if (e.target === $('cartDrawerOverlay')) closeCartDrawer();
+    });
+
+    $('clearCartBtn').addEventListener('click', () => {
+      if (!state.cart.length) return;
+      state.cart = [];
+      state.promoCode = null;
+      $('promoInput').value = '';
+      $('promoStatusMsg').classList.add('hidden');
+      saveState();
+      renderCart();
+      showToast('Shopping cart cleared');
+    });
+
+    $('toastUndoBtn').addEventListener('click', undoLastRemove);
+
+    // Search & Keyboard '/' shortcut
+    $('searchInput').addEventListener('input', (e) => {
+      state.searchQuery = e.target.value;
+      $('clearSearchBtn').classList.toggle('hidden', !state.searchQuery);
+      renderCatalog();
+    });
+
+    $('clearSearchBtn').addEventListener('click', () => {
+      state.searchQuery = '';
+      $('searchInput').value = '';
+      $('clearSearchBtn').classList.add('hidden');
+      renderCatalog();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === '/' && document.activeElement !== $('searchInput')) {
+        e.preventDefault();
+        $('searchInput').focus();
+      } else if (e.key === 'Escape') {
+        closeCartDrawer();
+        $('quickViewModal').classList.add('hidden');
+        $('checkoutModal').classList.add('hidden');
+      }
+    });
+
+    // Category Pills
+    document.querySelectorAll('.cat-pill').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.wishlistOnly = false;
+        state.category = btn.dataset.cat;
+        $('wishlistToggleBtn').classList.remove('border-rose-500/50', 'bg-rose-500/10');
+        updateCategoryPillUI();
+        renderCatalog();
+      });
+    });
+
+    // Wishlist Nav Filter Toggle
+    $('wishlistToggleBtn').addEventListener('click', () => {
+      state.wishlistOnly = !state.wishlistOnly;
+      if (state.wishlistOnly) {
+        $('wishlistToggleBtn').classList.add('border-rose-500/50', 'bg-rose-500/10');
+      } else {
+        $('wishlistToggleBtn').classList.remove('border-rose-500/50', 'bg-rose-500/10');
+      }
+      updateCategoryPillUI();
+      renderCatalog();
+    });
+
+    // Sort & Currency
+    $('sortSelect').addEventListener('change', (e) => {
+      state.sortBy = e.target.value;
+      renderCatalog();
+    });
+
+    $('currencySelect').value = state.currency;
+    $('currencySelect').addEventListener('change', (e) => {
+      state.currency = e.target.value;
+      saveState();
+      renderCatalog();
+      renderCart();
+      showToast(`Currency switched to ${state.currency}`);
+    });
+
+    // Promo Code Actions
+    $('applyPromoBtn').addEventListener('click', () => applyPromoCode($('promoInput').value));
+    document.querySelectorAll('.promo-pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        $('promoInput').value = pill.dataset.code;
+        applyPromoCode(pill.dataset.code);
+      });
+    });
+
+    // Shipping Method Toggles
+    $('shipStandardBtn').addEventListener('click', () => {
+      state.shippingMethod = 'standard';
+      $('shipStandardBtn').className = 'p-2.5 rounded-xl border border-indigo-500 bg-indigo-500/10 text-left transition';
+      $('shipExpressBtn').className = 'p-2.5 rounded-xl border border-aether-border bg-[#080B12] text-left hover:border-slate-600 transition';
+      renderCart();
+    });
+
+    $('shipExpressBtn').addEventListener('click', () => {
+      state.shippingMethod = 'express';
+      $('shipExpressBtn').className = 'p-2.5 rounded-xl border border-indigo-500 bg-indigo-500/10 text-left transition';
+      $('shipStandardBtn').className = 'p-2.5 rounded-xl border border-aether-border bg-[#080B12] text-left hover:border-slate-600 transition';
+      renderCart();
+    });
+
+    // Quick View Close
+    $('closeQuickViewBtn').addEventListener('click', () => $('quickViewModal').classList.add('hidden'));
+    $('quickViewModal').addEventListener('click', (e) => {
+      if (e.target === $('quickViewModal')) $('quickViewModal').classList.add('hidden');
+    });
+
+    // Checkout Flow & Digital Receipt Generation
+    $('proceedCheckoutBtn').addEventListener('click', () => {
+      const totals = calculateTotals();
+      $('checkoutPayableAmount').textContent = formatMoney(totals.grandTotalUSD);
+      $('checkoutForm').classList.remove('hidden');
+      $('receiptView').classList.add('hidden');
+      $('checkoutModalTitle').innerHTML = `<i data-lucide="shield-check" class="w-5 h-5 text-emerald-400"></i><span>Express Encrypted Checkout</span>`;
+      closeCartDrawer();
+      $('checkoutModal').classList.remove('hidden');
+      lucide.createIcons();
+    });
+
+    $('closeCheckoutBtn').addEventListener('click', () => $('checkoutModal').classList.add('hidden'));
+
+    $('checkoutForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const totals = calculateTotals();
+      const orderNum = `#AG-2026-${Math.floor(1000 + Math.random() * 9000)}`;
+
+      $('receiptOrderId').textContent = orderNum;
+      $('receiptCustomer').textContent = `${$('chkName').value} (${$('chkEmail').value})`;
+      $('receiptAddress').textContent = $('chkAddress').value;
+      $('receiptDate').textContent = new Date().toLocaleString();
+      $('receiptTotalPaid').textContent = formatMoney(totals.grandTotalUSD);
+
+      const listHtml = state.cart.map(item => {
+        const prod = PRODUCTS.find(p => p.id === item.id);
+        return `
+          <div class="flex justify-between py-1">
+            <span class="text-slate-300">${item.qty}× ${prod.name} <span class="text-slate-500">(${item.variant})</span></span>
+            <span class="font-mono text-slate-200">${formatMoney(prod.price * item.qty)}</span>
+          </div>
+        `;
+      }).join('');
+      $('receiptItemsList').innerHTML = listHtml;
+
+      // Clear cart after successful order
+      state.cart = [];
+      state.promoCode = null;
+      $('promoInput').value = '';
+      $('promoStatusMsg').classList.add('hidden');
+      saveState();
+      renderCart();
+
+      $('checkoutForm').classList.add('hidden');
+      $('receiptView').classList.remove('hidden');
+      $('checkoutModalTitle').innerHTML = `<i data-lucide="receipt" class="w-5 h-5 text-emerald-400"></i><span>Order Confirmation Receipt</span>`;
+      lucide.createIcons();
+      showToast(`Order ${orderNum} confirmed!`);
+    });
+
+    $('doneReceiptBtn').addEventListener('click', () => {
+      $('checkoutModal').classList.add('hidden');
+    });
+
+    // Bootstrap Application
+    window.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      renderCatalog();
+      renderCart();
+      startFlashCountdown();
+    });
+  </script>
+</body>
+</html>
